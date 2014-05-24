@@ -46,5 +46,10 @@ postorder(t(V,L,R)) :- postorder(L), postorder(R), write(V), write(' ').
 bst_max(t(M,nil,nil), M).
 bst_max(t(_,_,R), M) :- bst_max(R, M).
 
+bst_leaf_count(nil, 0).
+bst_leaf_count(t(_,nil,nil), C) :- C is 1.
+bst_leaf_count(t(_,L,R), C) :- bst_leaf_count(L, CL),
+	bst_leaf_count(R, CR), C is CR + CL, !.
+
 %testing tree [0-6]
 %%t(3,t(1,t(0,nil,nil),t(2,nil,nil)),t(5,t(4,nil,nil),t(6,nil,nil)))
