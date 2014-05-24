@@ -21,4 +21,18 @@ isbst(nil).
 isbst(t(V,L,R)) :- maxtree(L, Lmax), mintree(R, Rmin), Lmax < V, V < Rmin,
 	isbst(L),isbst(R).
 
+bst_contains(nil, _) :- fail.
+bst_contains(t(V,_,_), V) .
+bst_contains(t(V,L,_), X) :- X < V, bst_contains(L, X).
+bst_contains(t(V,_,R), X) :- X > V, bst_contains(R, X).
+
+
+%testing tree [0-6]
+%t(3,t(1,t(0,nil,nil),t(2,nil,nil)),t(5,t(4,nil,nil),t(6,nil,nil))
+
+
+
+
+
+
 
