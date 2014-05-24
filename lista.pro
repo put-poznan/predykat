@@ -80,8 +80,12 @@ mrg(X, [], LOUT, ACC) :- append(ACC, X, LOUT).
 mrg([], X, LOUT, ACC) :- append(ACC, X, LOUT).
 mrg([Ah|At], [Bh|Bt], LOUT, ACC) :- Ah < Bh, append(ACC, [Ah], A2),
 	mrg(At, [Bh|Bt], LOUT, A2).
-mrg([Ah|At], [Bh|Bt], LOUT, ACC) :- Bh < Ah, append(ACC, [Bh], A2),
+mrg([Ah|At], [Bh|Bt], LOUT, ACC) :- Bh =< Ah, append(ACC, [Bh], A2),
 	mrg([Ah|At], Bt, LOUT, A2).
 
 
-
+ms([], []).
+ms([X], [X]).
+ms(IN, LOUT) :- h2(IN, L, R),
+	ms(L, SL), ms(R, SR),
+	mrg(SL,SR, LOUT,[]),!.
