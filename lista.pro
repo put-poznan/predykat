@@ -70,4 +70,7 @@ in2sorted(X, [A,B|C], OUT) :- A < X, X < B, append([A,X,B],C,OUT).
 
 i2s(X, [], [X]).
 i2s(X, [Hin|Tin], [Hin|Tout]) :- X > Hin, i2s(X, Tin, Tout).
-i2s(X, [Hin|Tin], [X, Hin|Tin]) :- X < Hin.
+i2s(X, [Hin|Tin], [X, Hin|Tin]) :- X =< Hin.
+
+is([X], OUT, ACC) :- i2s(X, ACC, OUT).
+is([Hin|Tin], OUT, ACC) :- i2s(Hin, ACC, A2), is(Tin, OUT, A2).
