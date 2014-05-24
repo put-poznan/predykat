@@ -74,3 +74,14 @@ i2s(X, [Hin|Tin], [X, Hin|Tin]) :- X =< Hin.
 
 is([X], OUT, ACC) :- i2s(X, ACC, OUT).
 is([Hin|Tin], OUT, ACC) :- i2s(Hin, ACC, A2), is(Tin, OUT, A2).
+
+mrg([], [], [], _).
+mrg(X, [], LOUT, ACC) :- append(ACC, X, LOUT).
+mrg([], X, LOUT, ACC) :- append(ACC, X, LOUT).
+mrg([Ah|At], [Bh|Bt], LOUT, ACC) :- Ah < Bh, append(ACC, [Ah], A2),
+	mrg(At, [Bh|Bt], LOUT, A2).
+mrg([Ah|At], [Bh|Bt], LOUT, ACC) :- Bh < Ah, append(ACC, [Bh], A2),
+	mrg([Ah|At], Bt, LOUT, A2).
+
+
+
