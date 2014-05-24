@@ -26,13 +26,11 @@ bst_contains(t(V,_,_), V) .
 bst_contains(t(V,L,_), X) :- X < V, bst_contains(L, X).
 bst_contains(t(V,_,R), X) :- X > V, bst_contains(R, X).
 
+bst_count(nil, 0).
+bst_count(t(_,L,R), C) :- CC is 1,
+	bst_count(L, CL), bst_count(R, CR),
+	C is CC + CL + CR.
+
 
 %testing tree [0-6]
-%t(3,t(1,t(0,nil,nil),t(2,nil,nil)),t(5,t(4,nil,nil),t(6,nil,nil))
-
-
-
-
-
-
-
+%%t(3,t(1,t(0,nil,nil),t(2,nil,nil)),t(5,t(4,nil,nil),t(6,nil,nil)))
