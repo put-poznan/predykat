@@ -31,6 +31,17 @@ bst_count(t(_,L,R), C) :- CC is 1,
 	bst_count(L, CL), bst_count(R, CR),
 	C is CC + CL + CR.
 
+bst_sum(nil, 0).
+bst_sum(t(V,L,R), S) :- bst_sum(L, SL), bst_sum(R, SR), S is V + SL + SR.
+
+preorder(nil).
+preorder(t(V,L,R)) :- write(V),write(' '), preorder(L), preorder(R).
+
+inorder(nil).
+inorder(t(V,L,R)) :- inorder(L), write(V), write(' '), inorder(R).
+
+postorder(nil).
+postorder(t(V,L,R)) :- postorder(L), postorder(R), write(V), write(' ').
 
 %testing tree [0-6]
 %%t(3,t(1,t(0,nil,nil),t(2,nil,nil)),t(5,t(4,nil,nil),t(6,nil,nil)))
