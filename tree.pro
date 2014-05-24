@@ -43,5 +43,8 @@ inorder(t(V,L,R)) :- inorder(L), write(V), write(' '), inorder(R).
 postorder(nil).
 postorder(t(V,L,R)) :- postorder(L), postorder(R), write(V), write(' ').
 
+bst_max(t(M,nil,nil), M).
+bst_max(t(_,_,R), M) :- bst_max(R, M).
+
 %testing tree [0-6]
 %%t(3,t(1,t(0,nil,nil),t(2,nil,nil)),t(5,t(4,nil,nil),t(6,nil,nil)))
