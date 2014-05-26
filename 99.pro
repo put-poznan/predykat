@@ -54,6 +54,26 @@ recount([Hin|Tin], [Hout|Tout]) :- cl(Hin, COUNT), my_last(Hin, ELEM),
 	Hout = [COUNT,ELEM], recount(Tin,Tout).
 
 
+recount2([], []).
+recount2([Hin|Tin], [Hout|Tout]) :- cl(Hin, 1), my_last(Hin, ELEM),
+	Hout = ELEM, recount2(Tin,Tout),!.
+
+recount2([Hin|Tin], [Hout|Tout]) :- cl(Hin, COUNT), my_last(Hin, ELEM),
+	Hout = [COUNT,ELEM], recount2(Tin,Tout).
+
+gen_list(_, 0, []).
+gen_list(X, COUNT, [X|Ys]) :- COUNT @> 0, CC is COUNT - 1, gen_list(X, CC, Ys),!.
+
+expand_item([A,B], Y) :- gen_list(B, A, Y), !.
+expand_item(X, [X]).
+
+uncompress([], []).
+uncompress([Hin|Tin], Y) :- expand_item(Hin, HU), uncompress(Tin, ACC),
+	append(HU, ACC, Y).
+
+%dupli([], []).
+dupli([X], [X,X]).
+dupli([Hin|Tin], [Hin,Hin|Tout]) :- dupli(Tin, Tout).
 
 
 
