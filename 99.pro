@@ -76,12 +76,66 @@ dupli([X], [X,X]).
 dupli([Hin|Tin], [Hin,Hin|Tout]) :- dupli(Tin, Tout).
 
 
+dupli([X], [X], 1).
+dupli([X], [X|T], N) :- N > 1, NN is N - 1, dupli([X], T, NN).
+
+dupli([Hin|Tin], OUT, N) :- dupli([Hin], HDUP, N), dupli(Tin, TDUP, N),
+	append(HDUP, TDUP, OUT).
 
 
+todel(N, ACC) :- ACC mod N =:= 0.
 
+dropb([_|Tin], OUT, N, ACC) :- ACC2 = ACC + 1, ACC2 mod N =:= 0,
+	dropb(Tin, OUT, N, ACC2).
+dropb([Hin|Tin], [Hin|Tout], N, ACC) :- ACC2 = ACC + 1, ACC2 mod N =\= 0,
+	dropb(Tin, Tout, N, ACC2).
+dropb([], [], _, _).
 
+dropc([_|Tin], OUT, N, ACC) :- ACC2 = ACC + 1, ACC2 mod N =:= 0,
+	dropc(Tin, OUT, N, ACC2),!.
+dropc([Hin|Tin], [Hin|Tout], N, ACC) :- ACC2 = ACC + 1,
+	dropc(Tin, Tout, N, ACC2).
+dropc([], [], _, _).
 
+split([], _,  [], []).
+split([Hin|Tin], N, [Hin|TLOUT], ROUT) :- N > 0,
+	split(Tin, N - 1, TLOUT, ROUT),!.
+split([Hin|Tin], N, LOUT, [Hin|TROUT]) :- split(Tin, N, LOUT, TROUT).
 
+slice([], _, _, []).
+slice([Hin|Tin], I, K, [Hin|Tout]) :- I =< 1, K >= 1,
+	slice(Tin, I - 1, K - 1, Tout), !.
+slice([_|Tin], I, K, OUT) :- slice(Tin, I -  1, K-1, OUT).
 
+lshift(IN, N, OUT) :- N >= 0, split(IN, N, DYN, STAT), append(STAT, DYN, OUT).
+lshift(IN, N, OUT) :- N < 0, length(IN, LEN), split(IN, LEN +  N, STAT, DYN),
+	append(DYN, STAT, OUT).
 
+rem_at([], _, []).
+rem_at([_|Tin], INDEX, Tin) :- INDEX =:= 1,!.
+rem_at([H|Tin], INDEX, [H|Tout]) :- rem_at(Tin, INDEX - 1, Tout).
 
+ins_at(X, IN, 1, [X|IN]).
+ins_at(X, [H|Tin], INDEX, [H|Tout]) :- II is INDEX -  1,
+	ins_at(X, Tin, II, Tout).
+
+range(LO, LO, [LO]) :- !.
+range(LO, HI, [LO|TAIL]) :- LO < HI, LL is LO + 1, range(LL,HI,  TAIL).
+
+crand(LO, HI, X) :- random(SEED),  S2 is SEED * (HI- LO) + LO, round(S2, X).
+
+rnd_sel(_, 0, []).
+
+rnd_sel(IN, C, [H|T]) :- C > 0,
+	length(IN, HI),
+	crand(1, HI, INDEX),
+	rem_at(IN, INDEX, ACC), CC is HI - C - 1, rnd_sel(ACC, CC, OUT).
+
+lotto(C, BOUND, OUT) :- C >0, range(1, BOUND, ALL),
+	rnd_sel(ALL, C, OUT).
+
+is_prime(_, 1) :- !.
+is_prime(N, DIVIDOR) :- N mod DIVIDOR =/= 0, DD is DIVIDOR - 1,
+	is_prime(N, DD).
+
+is_prime(N) :- NN is N - 1, is_prime(N, NN).
