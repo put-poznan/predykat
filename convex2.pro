@@ -1,5 +1,5 @@
 min([X], X).
-min([H|T], H) :- min(T, MM), H > MM,!.
+min([H|T], H) :- min(T, MM), H < MM,!.
 min([_|T], M) :- min(T, M).
 
 is_convex(List) :- append([H|Mid], [Last], List), min(Mid, M),
